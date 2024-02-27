@@ -9,9 +9,13 @@ Antes de comenzar, asegúrate de tener Node.js y npm instalados en tu máquina. 
 1. Clona este repositorio en tu máquina local:
 
 ```bash
-git clone <URL_DEL_REPOSITORIO>
+# Clona este repositorio en tu máquina local
+git clone https://github.com/BlasGabriel/venta.git
+# Ir al directorio de trabajo
 cd venta
+# Instala los paquetes
 npm ci
+# Inicia el servidor de desarrollo
 npm run dev
 ```
 Esto iniciará el servidor de desarrollo y podrás acceder a la aplicación en tu navegador visitando [http://localhost:3000](http://localhost:3000).
