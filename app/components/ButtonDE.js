@@ -1,12 +1,14 @@
-import { Button } from '@mui/material'
-import React from 'react'
+import { Button } from "@mui/material";
+import React from "react";
 
-const ButtonDE = ({children}) => {
+const ButtonDE = ({ children, type = "button", onClick }) => {
   return (
     <>
-            <Button variant="contained">{children}</Button>
-</>
-  )
-}
+      <Button type={type} onClick={onClick} variant="contained">
+        {children}
+      </Button>
+    </>
+  );
+};
 
-export default ButtonDE
+export default ButtonDE;
