@@ -31,3 +31,9 @@ Este proyecto utiliza los siguientes paquetes:
 ## Requisitos
 
 Asegúrate de tener Node.js instalado en tu máquina. Este proyecto se ha probado con Node.js v20.11.1. Puedes descargar Node.js desde [su sitio web oficial](https://nodejs.org/en).
+
+```bash
+npm install prisma --save--dev
+npx prisma init
+npx prisma introspect
+```
