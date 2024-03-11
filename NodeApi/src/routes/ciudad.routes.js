@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { listar } from "../controllers/CiudadesControllers.js";
 const router = Router();
+import { listar } from "../controllers/CiudadesControllers.js";
 
-router.get("/listar ",listar );
+router.get("/listar",listar );
 
 export default router;
