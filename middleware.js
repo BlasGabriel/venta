@@ -11,20 +11,20 @@ function getUserData(request) {
 }
 
 export function middleware(request) {
-  const user = getUserData(request);
+//   const user = getUserData(request);
 
-  // Ahora puedes usar los datos del usuario en tu middleware
-  if (request.nextUrl.pathname.startsWith("/home") && (!user || !user.password)) {
-    console.log("No autenticado");
-    const response = NextResponse.redirect(new URL("/", request.url));
-    return response;
-  }
+//   // Ahora puedes usar los datos del usuario en tu middleware
+//   if (request.nextUrl.pathname.startsWith("/home") && (!user || !user.password)) {
+//     console.log("No autenticado");
+//     const response = NextResponse.redirect(new URL("/", request.url));
+//     return response;
+//   }
 
-  if ((user?.password) && request.nextUrl.pathname.startsWith("/")) {
-    console.log("Autenticado");
-    const response = NextResponse.redirect(new URL("/home", request.url));
-    return response;
-  }
+//   if ((user?.password) && request.nextUrl.pathname.startsWith("/")) {
+//     console.log("Autenticado");
+//     const response = NextResponse.redirect(new URL("/home", request.url));
+//     return response;
+//   }
 }
 
 // Verifica si la ruta coincide con "/admin" o "/login"
