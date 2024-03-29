@@ -4,7 +4,7 @@ Este repositorio contiene el desarrollo del módulo de ventas para una aplicaci�
 
 ## Inicio Rápido
 
-Antes de comenzar, asegúrate de tener Node.js y npm instalados en tu máquina. Luego, sigue los siguientes pasos:
+Antes de comenzar, asegúrate de tener la base de datos, Node.js y npm instalados en tu máquina. Luego, sigue los siguientes pasos:
 
 1. Clona este repositorio en tu máquina local:
 
@@ -45,6 +45,12 @@ Asegúrate de tener Node.js instalado en tu máquina. Este proyecto se ha probad
 La extensión Prisma nos ayuda a interactuar con la base de datos.
 
 # Integración de Node.js y Prisma
+
+Estos fueron los pasos que se utilizaron para la integración de Node.js y Prisma cuando se creó el proyecto.
+
+<div style="color:red;">¡Advertencia!</div>
+Los pasos de inicialización están arriba en el apartado de [Inicio Rápido](#inicio-rápido).
+
 
 Paquetes necesarios:
 
