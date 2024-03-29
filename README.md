@@ -48,10 +48,12 @@ La extensión Prisma nos ayuda a interactuar con la base de datos.
 
 Estos fueron los pasos que se utilizaron para la integración de Node.js y Prisma cuando se creó el proyecto.
 
-<span style="color:red;">¡Advertencia!</span>
 
 
-Los pasos de inicialización están arriba en el apartado de [Inicio Rápido](#inicio-rápido).
+ [! CAUTION ]
+> [!CAUTION]
+> **¡Advertencia!**
+>Los pasos de inicialización están arriba en el apartado de [Inicio Rápido](#inicio-rápido).
 
 Paquetes necesarios:
 
