@@ -50,8 +50,8 @@ Estos fueron los pasos que se utilizaron para la integración de Node.js y Prism
 
 <div style="color:red;">¡Advertencia!</div>
 
-Los pasos de inicialización están arriba en el apartado de [Inicio Rápido](#inicio-rápido).
 
+Los pasos de inicialización están arriba en el apartado de [Inicio Rápido](#inicio-rápido).
 
 Paquetes necesarios:
 
