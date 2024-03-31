@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
-// El controller de los usuarios se ralizo para tener comparibilidad con los demas modulos.
+// El controller de los usuarios se ralizo para tener compatibilidad con los demas modulos.
 // utilizando el mismo metodo de la base de datos.
 // Por eso las sentencias SQL 
 
