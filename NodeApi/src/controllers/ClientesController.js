@@ -10,8 +10,6 @@ export const listar = async(req, res, next) => {
                 ciudad: {
                     select: {descripcion: true}
                 },
-                cobro: true, 
-                cuenta_cobrar: true
             }
         });
         res.json(clientes);
@@ -33,12 +31,10 @@ export const buscar = async(req, res, next) => {
                 ciudad: {
                     select: {descripcion: true}
                 },
-                cobro: true, 
-                cuenta_cobrar: true
             }
         });
         if(!cliente){
-            res.json('Registro de ciente no encontrado...');
+            res.json('Registro de cliente no encontrado...');
         }
         else{
             res.json(cliente)
