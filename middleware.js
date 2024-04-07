@@ -1,5 +1,7 @@
+"use client";
+
 import { NextResponse } from "next/server";
-// import { useUser } from "./app/context/UserContext";
+import { useUser } from "./app/context/UserContext";
 
 // Supongamos que tienes una función para obtener los datos del usuario
 // Esta función puede variar dependiendo de cómo manejes la autenticación en tu aplicación
@@ -11,7 +13,9 @@ function getUserData(request) {
 }
 
 export function middleware(request) {
-//   const user = getUserData(request);
+  // const user = getUserData(request);
+  const { user } = useUser();
+
 
 //   // Ahora puedes usar los datos del usuario en tu middleware
 //   if (request.nextUrl.pathname.startsWith("/home") && (!user || !user.password)) {

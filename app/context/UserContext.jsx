@@ -1,6 +1,6 @@
 "use client";
-
 import { createContext, useState, useContext } from "react";
+import { getUsuario } from "../api/usuario.api";
 
 export const UserContext = createContext();
 
@@ -19,9 +19,18 @@ export const UserProvider = ({ children }) => {
         email: "",
         password: false
     });
-    
+
+    const getUser = async (user) => {
+        try {
+            const response = await getUsuario(user);
+            setUser(response.data);
+        } catch (error) {
+            console.error("Error al obtener usuario:", error);
+        }
+    }
+
     return (
-        <UserContext.Provider value={{ user, setUser }}>
+        <UserContext.Provider value={{ user, setUser, getUser }}>
             {children}
         </UserContext.Provider>
     );

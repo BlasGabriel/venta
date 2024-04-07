@@ -28,7 +28,7 @@ export const buscarUsuarioActivo = async (req, res, next) => {
             AND password = SHA2(${password}, 256) 
             AND estado = 1;
         `;
-        res.json(usuario);
+        res.json(usuario[0]);
     } catch (error) {
         next(error);
     }
