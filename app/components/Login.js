@@ -19,6 +19,8 @@ const Login = () => {
     event.preventDefault();
     getUser(valuee);
     console.log(valuee);
+    console.log(user);
+
   };
 
   useEffect(() => {

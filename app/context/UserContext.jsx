@@ -1,7 +1,7 @@
 "use client";
-import { createContext, useState, useContext } from "react";
+import { createContext, useState, useContext, useEffect } from "react";
 import { getUsuario } from "../api/usuario.api";
-
+import Cookies from "js-cookie";
 export const UserContext = createContext();
 
 export const useUser = () => {
@@ -13,21 +13,33 @@ export const useUser = () => {
 }
 
 export const UserProvider = ({ children }) => {
-    // Solo utiliza useState si estás seguro de que el componente se renderiza en el lado del cliente
     const [user, setUser] = useState({
-        name: "",
-        email: "",
-        password: false
+        id_usuario: '',
+        id_persona: '',
+        id_perfil: '',
+        login: '',
+        password: '',
+        estado: 0
     });
 
+    
     const getUser = async (user) => {
         try {
             const response = await getUsuario(user);
             setUser(response.data);
+            console.log("User:", response);
+            Cookies.set("userData", JSON.stringify(response.data));
         } catch (error) {
             console.error("Error al obtener usuario:", error);
         }
     }
+
+    useEffect(() => {
+        // Cargar datos del usuario al montar el componente
+        // getUser();
+        Cookies.set("userData", JSON.stringify(user));
+
+    }, []);
 
     return (
         <UserContext.Provider value={{ user, setUser, getUser }}>
