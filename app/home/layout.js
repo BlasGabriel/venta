@@ -4,9 +4,10 @@ import ItemButtonNav from "../components/ItemButtonNav";
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
-      <body>
-        {/* Layout UI */}
+    // <html lang="en">
+      // {/* <body> */}
+        // {/* Layout UI */}
+        <>
         <Titulo titulo="Titulo" />
         <Stack direction="row" spacing={2}>
           <ItemButtonNav linkTo="/home/DeudasPagar">Deudas a pagar</ItemButtonNav>
@@ -17,7 +18,8 @@ export default function RootLayout({ children }) {
           <ItemButtonNav >Salir </ItemButtonNav>
         </Stack>
         <main>{children}</main>
-      </body>
-    </html>
+        </>
+      // {/* </body> */}
+    // {/* </html> */}
   );
 }

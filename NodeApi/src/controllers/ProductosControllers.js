@@ -4,7 +4,12 @@ import { prisma } from "../db.js";
 // Tendrá la función de listar
 export const listar = async (req, res, next) => {
     try {
-        const products = await prisma.producto.findMany();
+        const products = await prisma.producto.findMany({
+            include: {
+                categoria: true,
+                unidad_de_medida: true
+            }
+        });
         res.json(products);
     } catch (error) {
         next(error);

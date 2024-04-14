@@ -32,6 +32,7 @@
 //     return ipAddress;
 // }
 import express from "express";
+import cors from "cors";
 // Rutas 
 import routes from "./routes/Routes.js";
 import os from "os";
@@ -45,6 +46,7 @@ const appUrllocalhost = `http://localhost:${port}`;
 const app = express();
 
 app.use(express.json());
+app.use(cors());
 // Rutas 
 // revisar la ruta ./routes/Routes.js
 app.use(appUrl, routes);
