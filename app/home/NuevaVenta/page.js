@@ -3,11 +3,13 @@ import React, { useEffect, useState } from 'react';
 import { useProductos } from '@/app/context/ProductosContext';
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, TextField } from '@mui/material';
 import ButtonDE from '@/app/components/ButtonDE';
+import { useClientes } from '@/app/context/ClientesContext';
 
 function Page() {
   const { products, getProducts } = useProductos();
   const [cart, setCart] = useState([]);
   const [quantity, setQuantity] = useState({}); // Estado para almacenar la cantidad de cada producto
+  const { getClientes, getClienteRuc, getClienteId } = useClientes();
 
   function addToCart(product) {
     // Obtener la cantidad del producto o establecerla como 1 si no se proporciona
@@ -17,8 +19,15 @@ function Page() {
   }
 
   useEffect(() => {
-    getProducts();
-  }, []);
+    const fetchData = async () => {
+        await getProducts();
+        console.log(await getClientes());
+        console.log("RUC	", await getClienteRuc(1234567));
+        console.log("ID	", await getClienteId(7));
+    };
+
+    fetchData();
+}, []);
 
   if (!products) {
     return <div>Cargando productos...</div>;
