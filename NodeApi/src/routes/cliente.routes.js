@@ -1,7 +1,8 @@
 import {Router} from 'express';
 import {
     listar,
-    buscar,  
+    buscarId,
+    buscarRuc, 
     insertar,
     editar,
     eliminar
@@ -10,7 +11,8 @@ import {
 const router = Router();
 
 router.get('/listar', listar);
-router.get('/listar/:id', buscar);
+router.get('/listar/id/:id', buscarId);
+router.get('/listar/ruc/:ruc', buscarRuc);
 router.post('/insertar', insertar);
 router.put('/editar/:id', editar);
 router.patch('/eliminar/:id', eliminar);

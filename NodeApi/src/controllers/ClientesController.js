@@ -19,12 +19,38 @@ export const listar = async(req, res, next) => {
     }
 }
 
-export const buscar = async(req, res, next) => {
+export const buscarId = async(req, res, next) => {
     try{
         const id = parseInt(req.params.id);
         const cliente = await prisma.cliente.findFirst({
             where: {
                 id_cliente: id,
+                estado: 1
+            },
+            include: {
+                ciudad: {
+                    select: {descripcion: true}
+                },
+            }
+        });
+        if(!cliente){
+            res.json('Registro de cliente no encontrado...');
+        }
+        else{
+            res.json(cliente)
+        }
+    }
+    catch(error){
+        next(error);
+    }
+}
+export const buscarRuc = async(req, res, next) => {
+    try{
+        const ruc = parseInt(req.params.ruc);
+        const cliente = await prisma.cliente.findFirst({
+            where: {
+                // id_cliente: id,
+                ruc: ruc,
                 estado: 1
             },
             include: {
