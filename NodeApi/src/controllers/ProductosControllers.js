@@ -7,7 +7,8 @@ export const listar = async (req, res, next) => {
         const products = await prisma.producto.findMany({
             include: {
                 categoria: true,
-                unidad_de_medida: true
+                unidad_de_medida: true,
+                stock: true
             }
         });
         res.json(products);
@@ -23,7 +24,8 @@ export const listarId = async (req, res, next) => {
             where: { id },
             include: {
                 categoria: true,
-                unidad_de_medida: true
+                unidad_de_medida: true,
+                stock: true
             }
         });
         res.json(product);

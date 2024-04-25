@@ -4,7 +4,11 @@ export const listar = async(req, res, next) => {
     try{
         const cobros = await prisma.cuenta_cobrar.findMany({
             where: {
-                estado: 1
+                estado: 1,
+            },
+            include: {
+                cliente: true,
+                usuario: true
             }
         });
         res.json(cobros);
@@ -21,6 +25,10 @@ export const buscar = async(req, res, next) => {
             where: {
                 id_cuenta_cobrar: id,
                 estado: 1
+            },
+            include: {
+                cliente: true,
+                usuario: true
             }
         });
 
