@@ -1,4 +1,4 @@
-import { prisma } from "../db";
+import { prisma } from "../db.js";
 
 //El controller de producto se creo en modo de prueba
 //tendra las funcion de listar
