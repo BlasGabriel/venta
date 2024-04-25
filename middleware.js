@@ -1,33 +1,26 @@
 import { NextResponse } from "next/server";
-// import { useUser } from "./app/context/UserContext";
-
-// Supongamos que tienes una función para obtener los datos del usuario
-// Esta función puede variar dependiendo de cómo manejes la autenticación en tu aplicación
-function getUserData(request) {
-    // Aquí obtienes los datos del usuario, por ejemplo, desde la sesión, token, base de datos, etc.
-    // Supongamos que los datos del usuario están disponibles en request.user
-    const user = request.user;
-    return user;
-}
 
 export function middleware(request) {
-//   const user = getUserData(request);
+  // Obtener los datos del usuario de la cookie
+  const userData = request.cookies.get('userData');
 
-//   // Ahora puedes usar los datos del usuario en tu middleware
-//   if (request.nextUrl.pathname.startsWith("/home") && (!user || !user.password)) {
-//     console.log("No autenticado");
-//     const response = NextResponse.redirect(new URL("/", request.url));
-//     return response;
-//   }
 
-//   if ((user?.password) && request.nextUrl.pathname.startsWith("/")) {
-//     console.log("Autenticado");
-//     const response = NextResponse.redirect(new URL("/home", request.url));
-//     return response;
-//   }
+  // Verificar si se recibieron datos del usuario en la cookie
+  if (userData) {
+    const userDataJson = JSON.parse(userData.value);
+    console.log('Datos del usuario obtenidos de la cookie middleware:', userDataJson);
+    // Puedes hacer lo que necesites con los datos del usuario obtenidos de la cookie
+  } else {
+    // Continuar con la respuesta predeterminada
+    // return NextResponse.next();
+    console.log('No se encontraron datos del usuario en la cookie middleware');
+  }
+
+  // Continuar con la respuesta predeterminada
+  return NextResponse.next();
 }
 
-// Verifica si la ruta coincide con "/admin" o "/login"
+// Verifica si la ruta coincide con "/home" o "/"
 export const config = {
   matcher: ["/home(.*)", "/"],
 };

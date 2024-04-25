@@ -1,11 +1,14 @@
 "use client";
 import { Container, TextField, Typography } from "@mui/material";
 import Link from "next/link";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ButtonDE from "./ButtonDE";
+import { useUser } from "../context/UserContext";
 
 const Login = () => {
   const [valuee, setValue] = useState();
+
+  const { user, getUser } = useUser();
   const handleChange = (event) => {
     setValue({
       ...valuee,
@@ -14,8 +17,15 @@ const Login = () => {
   };
   const handleSubmit = (event) => {
     event.preventDefault();
+    getUser(valuee);
     console.log(valuee);
+    console.log(user);
+
   };
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
   return (
     <div style={{ width: "100%" }}>
       <form onSubmit={handleSubmit}>
@@ -31,7 +41,7 @@ const Login = () => {
             <TextField
               type="text"
               label="Nombre de usuario"
-              name="username"
+              name="login"
               onChange={handleChange}
               // className="block  w-full "
             />
