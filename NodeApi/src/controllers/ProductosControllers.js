@@ -15,3 +15,19 @@ export const listar = async (req, res, next) => {
         next(error);
     }
 }
+
+export const listarId = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const product = await prisma.producto.findUnique({
+            where: { id },
+            include: {
+                categoria: true,
+                unidad_de_medida: true
+            }
+        });
+        res.json(product);
+    } catch (error) {
+        next(error);
+    }
+}
