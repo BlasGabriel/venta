@@ -27,22 +27,58 @@ function Page() {
   const [quantity, setQuantity] = useState({}); // Estado para almacenar la cantidad de cada producto
   const { getClientes, getClienteRuc, getClienteId } = useClientes();
 
-  function addToCart(product) {
-    // Verificar si el producto ya está en el carrito
-    const existingProductIndex = cart.findIndex(
-      (item) => item.id_producto == product.id_producto
-    );
+  // function addToCart(product) {
+  //   // Verificar si el producto ya está en el carrito
+  //   const existingProductIndex = cart.findIndex(
+  //     (item) => item.id_producto == product.id_producto
+  //   );
+  //   console.log(quantity);
+  //   console.log(product);
 
-    if (existingProductIndex !== -1) {
-      // Si el producto ya está en el carrito, actualizar su cantidad
-      const updatedCart = [...cart];
-      updatedCart[existingProductIndex].quantity++;
-      setCart(updatedCart);
+  // // Obtener la cantidad del producto del objeto quantity o establecerla en 1 si no existe
+  // const qty = quantity[product.id_producto] || 1;
+
+  //   if (existingProductIndex !== -1) {
+  //     // Si el producto ya está en el carrito, actualizar su cantidad
+  //     const updatedCart = [...cart];
+  //     updatedCart[existingProductIndex].quantity++;
+  //     setCart(updatedCart);
+  //   } else {
+  //     // Si el producto no está en el carrito, agregarlo con cantidad 1
+  //     setCart([...cart, { ...product, quantity: 1 }]);
+  //   }
+  //   console.log(cart);
+
+  // }
+  function addToCart(product) {
+    // Copiar el estado actual del carrito
+    const updatedCart = [...cart];
+  
+    // Obtener la cantidad del producto del objeto quantity
+    const qty = parseInt(quantity[product.id_producto]) || 0;
+  
+    // Verificar si el producto ya está en el carrito
+    const existingProductIndex = updatedCart.findIndex(item => item.id_producto == product.id_producto);
+  
+    if (qty > 0) {
+      // Si la cantidad es mayor que cero, actualizar la cantidad en el carrito
+      if (existingProductIndex !== -1) {
+        updatedCart[existingProductIndex].quantity = qty;
+      } else {
+        updatedCart.push({ ...product, quantity: qty });
+      }
     } else {
-      // Si el producto no está en el carrito, agregarlo con cantidad 1
-      setCart([...cart, { ...product, quantity: 1 }]);
+      // Si la cantidad es cero o no es un número válido, eliminar el producto del carrito si ya está presente
+      if (existingProductIndex !== -1) {
+        updatedCart.splice(existingProductIndex, 1);
+      }
     }
+  
+    // Actualizar el estado del carrito y el objeto quantity
+    setCart(updatedCart);
+    setQuantity({ ...quantity, [product.id_producto]: qty });
   }
+  
 
   function removeFromCart(productId) {
     // Filtrar el carrito para excluir el producto que se va a quitar
