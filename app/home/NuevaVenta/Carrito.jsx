@@ -2,7 +2,7 @@ import ButtonDE from '@/app/components/ButtonDE';
 import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 import React, { useState } from 'react'
 
-const Carrito = () => {
+const Carrito = ({cart}) => {
     //Contro de venta emergente
     const [open, setOpen] = useState(false);
 

@@ -87,7 +87,7 @@ function Page() {
               <TableCell align="right">Precio</TableCell>
               <TableCell>Observación</TableCell>
               <TableCell>Cantidad</TableCell> 
-              <TableCell><Carrito/></TableCell>
+              <TableCell><Carrito cart={cart} /></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
