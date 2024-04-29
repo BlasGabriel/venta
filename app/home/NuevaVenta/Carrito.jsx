@@ -1,9 +1,10 @@
 import ButtonDE from '@/app/components/ButtonDE';
-import { Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import React, { useState } from 'react'
+import BoxTable from '@/app/components/containers/BoxTable';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import React, { useState } from 'react';
 
-const Carrito = ({cart}) => {
-    //Contro de venta emergente
+const Carrito = ({ cart }) => {
+    // Control de venta emergente
     const [open, setOpen] = useState(false);
 
     const handleClickOpen = () => {
@@ -20,6 +21,16 @@ const Carrito = ({cart}) => {
         console.log("submit");
         handleClose();
     };
+
+    // Función para calcular el total
+    const calcularTotal = () => {
+        let total = 0;
+        cart.forEach(item => {
+            total += item.precio_venta_maximo * item.quantity;
+        });
+        return total;
+    };
+
     return (
         <>
             <ButtonDE onClick={handleClickOpen}>Finalizar</ButtonDE>
@@ -34,7 +45,32 @@ const Carrito = ({cart}) => {
                 <form onSubmit={handleSubmit}>
                     <DialogTitle>Venta</DialogTitle>
                     <DialogContent>
+                        <BoxTable>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Descripción</TableCell>
+                                        <TableCell align="right">Precio</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {cart.map((item) => (
+                                        <TableRow key={item.id_producto}>
+                                            <TableCell>
+                                                {item.descripcion} - Cantidad: {item.quantity}
+                                            </TableCell>
+                                            <TableCell>
+                                                {item.precio_venta_maximo * item.quantity}
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </BoxTable>
 
+                        <DialogContent>
+                            <strong>Total: {calcularTotal()}</strong>
+                        </DialogContent>
 
                         <DialogActions>
                             <ButtonDE color="#e91d63" onClick={handleClose}>
@@ -44,7 +80,6 @@ const Carrito = ({cart}) => {
                                 Guardar
                             </ButtonDE>
                         </DialogActions>
-
                     </DialogContent>
                 </form>
             </Dialog>
@@ -52,4 +87,4 @@ const Carrito = ({cart}) => {
     )
 }
 
-export default Carrito
+export default Carrito;

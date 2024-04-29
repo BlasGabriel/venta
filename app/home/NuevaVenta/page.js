@@ -26,40 +26,22 @@ function Page() {
   const [cart, setCart] = useState([]);
   const [quantity, setQuantity] = useState({}); // Estado para almacenar la cantidad de cada producto
   const { getClientes, getClienteRuc, getClienteId } = useClientes();
+  const [clienteRUC, setClienteRUC] = useState([]);
+  const [cliente, setCliente] = useState([]);
 
-  // function addToCart(product) {
-  //   // Verificar si el producto ya está en el carrito
-  //   const existingProductIndex = cart.findIndex(
-  //     (item) => item.id_producto == product.id_producto
-  //   );
-  //   console.log(quantity);
-  //   console.log(product);
-
-  // // Obtener la cantidad del producto del objeto quantity o establecerla en 1 si no existe
-  // const qty = quantity[product.id_producto] || 1;
-
-  //   if (existingProductIndex !== -1) {
-  //     // Si el producto ya está en el carrito, actualizar su cantidad
-  //     const updatedCart = [...cart];
-  //     updatedCart[existingProductIndex].quantity++;
-  //     setCart(updatedCart);
-  //   } else {
-  //     // Si el producto no está en el carrito, agregarlo con cantidad 1
-  //     setCart([...cart, { ...product, quantity: 1 }]);
-  //   }
-  //   console.log(cart);
-
-  // }
+ 
   function addToCart(product) {
     // Copiar el estado actual del carrito
     const updatedCart = [...cart];
-  
+
     // Obtener la cantidad del producto del objeto quantity
     const qty = parseInt(quantity[product.id_producto]) || 0;
-  
+
     // Verificar si el producto ya está en el carrito
-    const existingProductIndex = updatedCart.findIndex(item => item.id_producto == product.id_producto);
-  
+    const existingProductIndex = updatedCart.findIndex(
+      (item) => item.id_producto == product.id_producto
+    );
+
     if (qty > 0) {
       // Si la cantidad es mayor que cero, actualizar la cantidad en el carrito
       if (existingProductIndex !== -1) {
@@ -73,12 +55,13 @@ function Page() {
         updatedCart.splice(existingProductIndex, 1);
       }
     }
-  
+        console.log(product);
+
+
     // Actualizar el estado del carrito y el objeto quantity
     setCart(updatedCart);
     setQuantity({ ...quantity, [product.id_producto]: qty });
   }
-  
 
   function removeFromCart(productId) {
     // Filtrar el carrito para excluir el producto que se va a quitar
@@ -89,13 +72,24 @@ function Page() {
   useEffect(() => {
     const fetchData = async () => {
       await getProducts();
-      console.log(await getClientes());
-      console.log("RUC	", await getClienteRuc(1234567));
-      console.log("ID	", await getClienteId(7));
+      // console.log(await getClientes());
+      // console.log("RUC	", await getClienteRuc(1234567));
+      // console.log("ID	", await getClienteId(7));
     };
 
     fetchData();
   }, []);
+  const buscarCliente = async (ruc) => {
+    // console.log(ruc);
+    const response = await getClienteRuc(ruc);
+          // console.log("RUC	", await getClienteRuc(1234567));
+
+    setCliente(response);
+  };
+
+  useEffect(() => {
+    console.log(cliente);
+  }, [cliente]);
 
   //Contro de cantidad de intem moviles
   //--------------------------------------------------------------------------
@@ -221,31 +215,57 @@ function Page() {
             />
           </Stack>
         </BoxTable>
+        <Stack
+          // direction="row"
+          // justifyContent="center"
+          // alignItems="center"	
+          sx={{ m: 2 }}
+          spacing={1}
+        >
+          <Stack direction={"row"} spacing={2}>
+          <TextField
+            id="outlined-multiline-flexible"
+            label="Cliente RUC"
+            multiline
+            maxRows={4}
+            value={clienteRUC}
+            onChange={(e) => setClienteRUC(e.target.value)}
+            variant="outlined"
+          />
+          <ButtonDE onClick={() =>buscarCliente(clienteRUC)}>Buscar</ButtonDE>
+          </Stack>
+
         <BoxTable>
-          <TableRow>
-            <TableCell>Descripción</TableCell>
-            <TableCell align="right">Precio</TableCell>
-            {/* <TableCell>Observación</TableCell> */}
-            {/* <TableCell>Cantidad</TableCell> */}
-            <TableCell>
-              <Carrito cart={cart} />
-            </TableCell>
-          </TableRow>
-          <TableBody>
-            {cart.map((item) => (
-              <TableRow key={item.id_producto}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Descripción</TableCell>
+                <TableCell align="right">Precio</TableCell>
+                {/* <TableCell>Observación</TableCell> */}
+                {/* <TableCell>Cantidad</TableCell> */}
                 <TableCell>
-                  {item.descripcion} - Cantidad: {item.quantity}
-                </TableCell>
-                <TableCell>
-                  <ButtonDE onClick={() => removeFromCart(item.id_producto)}>
-                    Quitar
-                  </ButtonDE>
+                  <Carrito cart={cart} />
                 </TableCell>
               </TableRow>
-            ))}
-          </TableBody>
+            </TableHead>
+            <TableBody>
+              {cart.map((item) => (
+                <TableRow key={item.id_producto}>
+                  <TableCell>
+                    {item.descripcion} - Cantidad: {item.quantity}
+                  </TableCell>
+                  <TableCell>
+                    <ButtonDE onClick={() => removeFromCart(item.id_producto)}>
+                      Quitar
+                    </ButtonDE>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
         </BoxTable>
+
+        </Stack>
       </Box>
       {/* </TableContainer> */}
     </div>
