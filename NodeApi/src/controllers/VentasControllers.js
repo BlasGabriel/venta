@@ -72,26 +72,48 @@ export const insertar = async (req, res, next) => {
             }if(product.cantidad > productExist.stock){
                 throw new Error(`El producto ${product.id} no tiene stock suficiente`)
             }
-            await itemVenta.create({
+            // console.log(product)
+           const item_venta = await prisma.item_venta.create({
                 data: {
                     id_venta: venta.id_venta,
                     id_producto: product.id_producto,
                     cantidad: product.quantity,
-                    precio_unitario: product.precio_maximo,
-                    monto_iva: product.monto_iva
+                    precio_unitario: product.precio_venta_maximo,
+                    monto_iva: product.porcentaje_iva
                 }
             })
+            console.log(item_venta)
 
-            await prisma.producto.update({
+            // await prisma.producto.update({
+            //     where: {
+            //         id_producto: product.id_producto
+            //     },
+            //     data: {
+            //         stock: {
+            //             decrement: product.quantity
+            //         }
+            //     }
+            // })
+            const nuevoStock = producto.stock - product.quantity;
+            const producto = await prisma.producto.update({
                 where: {
                     id_producto: product.id_producto
                 },
                 data: {
-                    stock: {
-                        decrement: product.quantity
-                    }
+                    stock: nuevoStock
                 }
-            })
+            });
+            
+            // if (producto) {
+            //     await prisma.producto.update({
+            //         where: {
+            //             id_producto: product.id_producto
+            //         },
+            //     });
+            // }
+            console.log("producto actualizado")
+            console.log(producto)
+            
         })
         res.json(venta);
     } catch (error) {
