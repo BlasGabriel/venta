@@ -61,7 +61,7 @@ export const insertar = async (req, res, next) => {
         productos.map(async (product) => {
             const productExist = await prisma.producto.findUnique({
                 where: {
-                    id: product.id
+                    id_producto: product.id_producto
                 }
             })
             if(!productExist){
@@ -71,9 +71,9 @@ export const insertar = async (req, res, next) => {
             }
             await itemVenta.create({
                 data: {
-                    id_venta: venta.id,
-                    id_producto: product.id,
-                    cantidad: product.cantidad,
+                    id_venta: venta.id_venta,
+                    id_producto: product.id_producto,
+                    cantidad: product.quantity,
                     precio_unitario: product.precio_maximo,
                     monto_iva: product.monto_iva
                 }
@@ -81,11 +81,11 @@ export const insertar = async (req, res, next) => {
 
             await prisma.producto.update({
                 where: {
-                    id: product.id
+                    id_producto: product.id_producto
                 },
                 data: {
                     stock: {
-                        decrement: product.cantidad
+                        decrement: product.quantity
                     }
                 }
             })

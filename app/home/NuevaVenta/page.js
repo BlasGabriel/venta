@@ -29,7 +29,6 @@ function Page() {
   const [clienteRUC, setClienteRUC] = useState([]);
   const [cliente, setCliente] = useState([]);
 
- 
   function addToCart(product) {
     // Copiar el estado actual del carrito
     const updatedCart = [...cart];
@@ -55,8 +54,7 @@ function Page() {
         updatedCart.splice(existingProductIndex, 1);
       }
     }
-        console.log(product);
-
+    console.log(product);
 
     // Actualizar el estado del carrito y el objeto quantity
     setCart(updatedCart);
@@ -82,7 +80,7 @@ function Page() {
   const buscarCliente = async (ruc) => {
     // console.log(ruc);
     const response = await getClienteRuc(ruc);
-          // console.log("RUC	", await getClienteRuc(1234567));
+    // console.log("RUC	", await getClienteRuc(1234567));
 
     setCliente(response);
   };
@@ -218,53 +216,56 @@ function Page() {
         <Stack
           // direction="row"
           // justifyContent="center"
-          // alignItems="center"	
+          // alignItems="center"
           sx={{ m: 2 }}
           spacing={1}
         >
           <Stack direction={"row"} spacing={2}>
-          <TextField
-            id="outlined-multiline-flexible"
-            label="Cliente RUC"
-            multiline
-            maxRows={4}
-            value={clienteRUC}
-            onChange={(e) => setClienteRUC(e.target.value)}
-            variant="outlined"
-          />
-          <ButtonDE onClick={() =>buscarCliente(clienteRUC)}>Buscar</ButtonDE>
+            <TextField
+              id="outlined-multiline-flexible"
+              label="Cliente RUC"
+              multiline
+              maxRows={4}
+              value={clienteRUC}
+              onChange={(e) => setClienteRUC(e.target.value)}
+              variant="outlined"
+            />
+            <ButtonDE onClick={() => buscarCliente(clienteRUC)}>
+              Buscar
+            </ButtonDE>
           </Stack>
 
-        <BoxTable>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Descripción</TableCell>
-                <TableCell align="right">Precio</TableCell>
-                {/* <TableCell>Observación</TableCell> */}
-                {/* <TableCell>Cantidad</TableCell> */}
-                <TableCell>
-                  <Carrito cart={cart} />
-                </TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {cart.map((item) => (
-                <TableRow key={item.id_producto}>
+          <BoxTable>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>Descripción</TableCell>
+                  <TableCell align="right">Precio</TableCell>
+                  {/* <TableCell>Observación</TableCell> */}
+                  {/* <TableCell>Cantidad</TableCell> */}
                   <TableCell>
-                    {item.descripcion} - Cantidad: {item.quantity}
-                  </TableCell>
-                  <TableCell>
-                    <ButtonDE onClick={() => removeFromCart(item.id_producto)}>
-                      Quitar
-                    </ButtonDE>
+                    <Carrito cart={cart} cliente={cliente} />
                   </TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </BoxTable>
-
+              </TableHead>
+              <TableBody>
+                {cart.map((item) => (
+                  <TableRow key={item.id_producto}>
+                    <TableCell>
+                      {item.descripcion} - Cantidad: {item.quantity}
+                    </TableCell>
+                    <TableCell>
+                      <ButtonDE
+                        onClick={() => removeFromCart(item.id_producto)}
+                      >
+                        Quitar
+                      </ButtonDE>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </BoxTable>
         </Stack>
       </Box>
       {/* </TableContainer> */}
