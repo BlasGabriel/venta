@@ -4,6 +4,7 @@ import { createContext } from "react";
 import { UserProvider } from "./UserContext";
 import { ProductosProvider } from "./ProductosContext";
 import { ClientesProvider } from "./ClientesContext";
+import { VentasProvider } from "./VentasContext";
 
 export const ContextGlob = createContext();
 
@@ -22,7 +23,9 @@ export const ContextGlobProvider = ({ children }) => {
     <UserProvider>
       <ClientesProvider>
         <ProductosProvider>
+          <VentasProvider>
           {children}
+          </VentasProvider>
         </ProductosProvider>
       </ClientesProvider>
     </UserProvider>

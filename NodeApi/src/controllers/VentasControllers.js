@@ -34,16 +34,19 @@ export const listarId = async (req, res, next) => {
 
 export const insertar = async (req, res, next) => {
     try {
-        const { id_cliente, fecha, total, estado,id_usuario,id_deposito,tipo_operacion,descuento,subtotal,total_iva,productos } = req.body;
+        const { id_cliente, fecha, total, estado,id_usuario,id_deposito,tipo_operacion,descuento,subtotal,total_iva,productos,fecha_anulacion } = req.body;
+      
+
         const venta = await prisma.venta.create({
             data: {
                 id_cliente,
-                fecha,
+                fecha: fecha,
+                fecha_anulacion: new Date( fecha_anulacion),
                 total,
                 estado,
                 id_usuario,
                 id_deposito,
-                tipo_operacion,
+                tipo_operacion: parseInt(tipo_operacion),
                 descuento,
                 subtotal,
                 total_iva

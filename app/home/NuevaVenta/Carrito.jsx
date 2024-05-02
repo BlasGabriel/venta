@@ -1,11 +1,13 @@
 import ButtonDE from '@/app/components/ButtonDE';
 import BoxTable from '@/app/components/containers/BoxTable';
 import { useUser } from '@/app/context/UserContext';
+import { useVentas } from '@/app/context/VentasContext';
 import { Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import React, { useState } from 'react';
 
 const Carrito = ({ cart, cliente }) => {
     const { user } = useUser();
+    const { insertarVenta } = useVentas();
     // Control de venta emergente
     const [open, setOpen] = useState(false);
     const [tipoOperacion, setTipoOperacion] = React.useState('');
@@ -30,12 +32,13 @@ const Carrito = ({ cart, cliente }) => {
         // console.log(cart);
         // console.log(cliente);
         // 1234567
-        // console.log(cliente);
+        // '0000-00-00 00:00:00'
         console.log(
             // data: 
             {
                 id_cliente: cliente.id_cliente,
                 fecha: calcularFecha(),
+                fecha_anulacion: '0000-00-00 00:00:00',
                 total: calcularTotal(),
                 estado: 1,
                 id_usuario: user.id_usuario,
@@ -47,6 +50,23 @@ const Carrito = ({ cart, cliente }) => {
                 productos: cart
             }
         );
+
+        insertarVenta(
+            {
+                id_cliente: cliente.id_cliente,
+                fecha_anulacion: calcularFecha(),
+                fecha: 0,
+                total: calcularTotal(),
+                estado: 1,
+                id_usuario: 1,
+                // id_usuario: user.id_usuario,
+                id_deposito: 1,
+                tipo_operacion: tipoOperacion,
+                descuento: 0,
+                subtotal: calcularSubtotal(),
+                total_iva: calcularTotalIva(),
+                productos: cart
+            })
         handleClose();
     };
 
@@ -79,10 +99,13 @@ const Carrito = ({ cart, cliente }) => {
     // function calcular fecha
     const calcularFecha = () => {
         const fecha = new Date();
-        let dia = fecha.getDate(); // Cambiar a let
-        let mes = fecha.getMonth() + 1; // Cambiar a let
+        let dia = fecha.getDate();
+        let mes = fecha.getMonth() + 1;
         const ano = fecha.getFullYear();
-        
+        let hora = fecha.getHours();
+        let minutos = fecha.getMinutes();
+        let segundos = fecha.getSeconds();
+    
         if (dia < 10) {
             dia = '0' + dia;
         }
@@ -91,9 +114,22 @@ const Carrito = ({ cart, cliente }) => {
             mes = '0' + mes;
         }
     
-        return `${ano}-${mes}-${dia}`;
+        if (hora < 10) {
+            hora = '0' + hora;
+        }
+    
+        if (minutos < 10) {
+            minutos = '0' + minutos;
+        }
+    
+        if (segundos < 10) {
+            segundos = '0' + segundos;
+        }
+    
+        return `${ano}-${mes}-${dia} ${hora}:${minutos}:${segundos}`;
     }
     
+
 
     return (
         <>
@@ -119,8 +155,8 @@ const Carrito = ({ cart, cliente }) => {
                                 onChange={handleChange}
                                 fullWidth
                             >
-                                <MenuItem value="contado">Contado</MenuItem>
-                                <MenuItem value="credito">Crédito</MenuItem>
+                                <MenuItem value="0">Contado</MenuItem>
+                                <MenuItem value="1">Crédito</MenuItem>
                             </Select>
                         </FormControl>
                         <BoxTable>
