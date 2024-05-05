@@ -94,13 +94,21 @@ export const insertar = async (req, res, next) => {
             //         }
             //     }
             // })
-            const nuevoStock = producto.stock - product.quantity;
-            const producto = await prisma.producto.update({
+            
+            const stockActual = await prisma.stock.findMany({
                 where: {
+                    id_producto: product.id_producto
+                }
+            })
+            console.log(stockActual[0])
+            const nuevoStock = stockActual[0].cantidad - product.quantity;
+            const stock = await prisma.stock.update({
+                where: {
+                    id_stock: stockActual[0].id_stock,
                     id_producto: product.id_producto
                 },
                 data: {
-                    stock: nuevoStock
+                    cantidad: nuevoStock
                 }
             });
             
@@ -112,7 +120,7 @@ export const insertar = async (req, res, next) => {
             //     });
             // }
             console.log("producto actualizado")
-            console.log(producto)
+            console.log(stock)
             
         })
         res.json(venta);
