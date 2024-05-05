@@ -48,6 +48,7 @@ export const insertar = async(req, res, next) => {
     try{
         const cobro = req.body;
 
+        //se verifica si los datos del cliente corresponden a la venta registrada anteriormente
         const venta = await prisma.venta.findFirst({
             where: {
                 id_cliente: cobro.id_cliente
@@ -58,6 +59,7 @@ export const insertar = async(req, res, next) => {
             }
         });
 
+        //si los datos de la venta se relacionan con el cliente dado, entonces se habilita la cuenta para cobrar por dicha venta
         if(venta){
             await prisma.cuenta_cobrar.create({
                 data: {
@@ -73,6 +75,7 @@ export const insertar = async(req, res, next) => {
             res.json('Registro de cobro creado...');            
         }
         else{
+            //se emite el siguiente mensaje cuando la venta no corresponde al cliente seleccionado
             res.json('Los datos del cliente no corresponden a la venta...');
         }
     }
