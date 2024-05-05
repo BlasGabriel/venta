@@ -110,38 +110,41 @@ export const insertar = async (req, res, next) => {
 
       console.log("producto actualizado");
       console.log(stock);
-      if (tipo_operacion == 1) {
-        console.log("Credito");
-        const cuenta_cobrar = await prisma.cuenta_cobrar.create({
+    });
+    
+    if (tipo_operacion == 1) {
+      console.log("Credito");
+      const cuenta_cobrar = await prisma.cuenta_cobrar.create({
+        data: {
+          id_venta: venta.id_venta,
+          // id_deposito: id_deposito
+          id_cliente: id_cliente,
+          fecha: new Date(),
+          fecha_pago: new Date(),
+          monto: total,
+          porcentaje_interes: parseInt(interes),
+          tipo_interes: 0,
+        },
+      });
+      console.log(cuenta_cobrar);
+
+      // cantidadPagos
+
+      for (let index = 0; index < cantidadPagos; index++) {
+        const item_cobro = await prisma.item_cobro.create({
           data: {
-            id_venta: venta.id_venta,
-            // id_deposito: id_deposito
-            id_cliente: id_cliente,
-            fecha: new Date(),
-            fecha_pago: new Date(),
-            monto: total,
-            porcentaje_interes: parseInt(interes),
-            tipo_interes: 0,
+          //   id_venta: venta.id_venta,
+            id_cuenta_cobrar: cuenta_cobrar.id_cuenta_cobrar,
+            monto_nominal: total / cantidadPagos,
+            monto_real: total / cantidadPagos * interes / 100,
           },
         });
-        console.log(cuenta_cobrar);
 
-        // cantidadPagos
-
-        for (let index = 0; index < cantidadPagos; index++) {
-          const item_cobro = await prisma.item_cobro.create({
-            data: {
-            //   id_venta: venta.id_venta,
-              id_cuenta_cobrar: cuenta_cobrar.id_cuenta_cobrar,
-              monto_nominal: total / cantidadPagos,
-              monto_real: total / cantidadPagos * interes / 100,
-            },
-          });
-
-          console.log(item_cobro);
-        }
+        console.log(item_cobro);
       }
-    });
+    }
+
+
     res.json(venta);
   } catch (error) {
     next(error);
