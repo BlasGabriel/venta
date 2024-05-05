@@ -2,7 +2,7 @@ import ButtonDE from '@/app/components/ButtonDE';
 import BoxTable from '@/app/components/containers/BoxTable';
 import { useUser } from '@/app/context/UserContext';
 import { useVentas } from '@/app/context/VentasContext';
-import { Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, TextField } from '@mui/material';
 import React, { useState } from 'react';
 
 const Carrito = ({ cart, cliente }) => {
@@ -11,6 +11,8 @@ const Carrito = ({ cart, cliente }) => {
     // Control de venta emergente
     const [open, setOpen] = useState(false);
     const [tipoOperacion, setTipoOperacion] = React.useState('');
+    const [interes, setInteres] = useState('');
+    const [cantidadPagos, setCantidadPagos] = useState('');
 
     const handleChange = (event) => {
         setTipoOperacion(event.target.value);
@@ -65,7 +67,10 @@ const Carrito = ({ cart, cliente }) => {
                 descuento: 0,
                 subtotal: calcularSubtotal(),
                 total_iva: calcularTotalIva(),
-                productos: cart
+                productos: cart,
+                interes: interes,
+                cantidadPagos: cantidadPagos
+
             })
         handleClose();
     };
@@ -105,30 +110,38 @@ const Carrito = ({ cart, cliente }) => {
         let hora = fecha.getHours();
         let minutos = fecha.getMinutes();
         let segundos = fecha.getSeconds();
-    
+
         if (dia < 10) {
             dia = '0' + dia;
         }
-    
+
         if (mes < 10) {
             mes = '0' + mes;
         }
-    
+
         if (hora < 10) {
             hora = '0' + hora;
         }
-    
+
         if (minutos < 10) {
             minutos = '0' + minutos;
         }
-    
+
         if (segundos < 10) {
             segundos = '0' + segundos;
         }
-    
+
         return `${ano}-${mes}-${dia} ${hora}:${minutos}:${segundos}`;
     }
-    
+
+    const handleInteresChange = (event) => {
+        setInteres(event.target.value);
+    };
+
+    const handleCantidadPagosChange = (event) => {
+        setCantidadPagos(event.target.value);
+    };
+
 
 
     return (
@@ -154,11 +167,33 @@ const Carrito = ({ cart, cliente }) => {
                                 value={tipoOperacion}
                                 onChange={handleChange}
                                 fullWidth
+                                required
                             >
                                 <MenuItem value="0">Contado</MenuItem>
                                 <MenuItem value="1">Crédito</MenuItem>
                             </Select>
                         </FormControl>
+                        {tipoOperacion == '1' && (
+                            <>
+                                <TextField
+                                    fullWidth
+                                    label="Porcentaje de interés"
+                                    type="number"
+                                    value={interes}
+                                    onChange={handleInteresChange}
+                                    required
+                                />
+                                <TextField
+                                    fullWidth
+                                    label="Cantidad de pagos"
+                                    type="number"
+                                    value={cantidadPagos}
+                                    onChange={handleCantidadPagosChange}
+                                    required
+                                />
+                            </>
+                        )}
+
                         <BoxTable>
                             <Table>
                                 <TableHead>
