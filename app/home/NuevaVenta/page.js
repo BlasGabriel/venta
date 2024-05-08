@@ -14,6 +14,7 @@ import {
   TablePagination,
   InputAdornment,
   Box,
+  Typography,
 } from "@mui/material";
 import ButtonDE from "@/app/components/ButtonDE";
 import { useClientes } from "@/app/context/ClientesContext";
@@ -234,6 +235,7 @@ function Page() {
               Buscar
             </ButtonDE>
           </Stack>
+          <Typography variant="h5">Cliente: {cliente.descripcion}</Typography>
 
           <BoxTable>
             <Table>

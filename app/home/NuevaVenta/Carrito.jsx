@@ -2,7 +2,7 @@ import ButtonDE from '@/app/components/ButtonDE';
 import BoxTable from '@/app/components/containers/BoxTable';
 import { useUser } from '@/app/context/UserContext';
 import { useVentas } from '@/app/context/VentasContext';
-import { Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, TextField } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, FormControl, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableHead, TableRow, TextField, Typography } from '@mui/material';
 import React, { useState } from 'react';
 
 const Carrito = ({ cart, cliente }) => {
@@ -156,7 +156,9 @@ const Carrito = ({ cart, cliente }) => {
                 onClose={handleClose}
             >
                 <form onSubmit={handleSubmit}>
-                    <DialogTitle>Venta</DialogTitle>
+                    <DialogTitle>Cliente: {cliente.descripcion}</DialogTitle>
+                    {/* <Typography variant="h5">Cliente: {cliente.descripcion}</Typography> */}
+
                     <DialogContent>
                         {/* tipo_operacion */}
                         <FormControl fullWidth>
@@ -225,7 +227,7 @@ const Carrito = ({ cart, cliente }) => {
                             <ButtonDE color="#e91d63" onClick={handleClose}>
                                 Salir
                             </ButtonDE>
-                            <ButtonDE type={"submit"} onClick={handleClose}>
+                            <ButtonDE type={"submit"} >
                                 Guardar
                             </ButtonDE>
                         </DialogActions>
