@@ -86,7 +86,6 @@ model cobro {
 model compra {
   id_compra       Int            @id @default(autoincrement())
   fecha           DateTime       @db.Date
-  id_item_compra  Int
   id_usuario      Int
   estado          Int            @default(1) @db.TinyInt
   id_proveedor    Int
@@ -98,15 +97,14 @@ model compra {
   id_deposito     Int
   tipo_operacion  Int
   deposito        deposito       @relation(fields: [id_deposito], references: [id_deposito], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_deposito_compra")
-  item_compra     item_compra    @relation(fields: [id_item_compra], references: [id_item_compra], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_item_compra")
   proveedor       proveedor      @relation(fields: [id_proveedor], references: [id_proveedor], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_proveedor_compra")
   usuario         usuario        @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_usuario_compra")
   cuenta_pagar    cuenta_pagar[]
+  item_compra     item_compra[]
 
   @@index([id_deposito], map: "id_deposito")
   @@index([id_proveedor], map: "id_proveedor")
   @@index([id_usuario], map: "id_usuario")
-  @@index([id_item_compra], map: "fk_id_item_compra")
 }
 
 model cuenta_cobrar {
@@ -209,13 +207,16 @@ model item_cobro {
 model item_compra {
   id_item_compra  Int      @id @default(autoincrement())
   id_producto     Int
+  id_compra       Int
   cantidad        Int
   precio_unitario Int
   monto_iva       Decimal  @db.Decimal(10, 0)
-  compra          compra[]
+  compra          compra   @relation(fields: [id_compra], references: [id_compra], onUpdate: Restrict, map: "fk_id_compra_item_compra")
   producto        producto @relation(fields: [id_producto], references: [id_producto], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_producto_item_compra")
 
   @@index([id_producto], map: "id_produtco")
+  @@index([id_compra], map: "id_compra")
+  @@index([id_compra], map: "item_compra")
 }
 
 model item_pago {
