@@ -68,7 +68,10 @@ npx prisma init
 Realiza una introspección de la base de datos para generar los modelos de Prisma:
 
 ```bash
-npx prisma introspect
+# antiguo modo de ejecutar
+# npx prisma introspect
+npx prisma db pull
+
 ```
 
 Genera y aplica las migraciones de la base de datos:

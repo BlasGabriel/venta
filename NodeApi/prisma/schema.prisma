@@ -48,7 +48,7 @@ model ciudad {
 model cliente {
   id_cliente    Int             @id @default(autoincrement())
   descripcion   String          @db.VarChar(200)
-  ruc           Int
+  ruc           String          @db.VarChar(11)
   telefono      String          @db.VarChar(200)
   direccion     String          @db.VarChar(200)
   email         String          @db.VarChar(200)
@@ -58,30 +58,35 @@ model cliente {
   ciudad        ciudad          @relation(fields: [id_ciudad], references: [id_ciudad], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_ciudad_cliente")
   cobro         cobro[]
   cuenta_cobrar cuenta_cobrar[]
+  venta         venta[]
 
   @@index([id_ciudad], map: "id_ciudad")
 }
 
 model cobro {
-  id_cobro        Int      @id @default(autoincrement())
+  id_cobro        Int        @id @default(autoincrement())
   id_cliente      Int
   subtotal        Int
+  id_item_cobro   Int
   descuento       Int
   total           Int
-  fecha           DateTime @db.Date
-  fecha_anulacion DateTime @db.Date
+  fecha           DateTime   @db.Date
+  fecha_anulacion DateTime   @db.Date
   id_usuario      Int
-  estado          Int      @default(1) @db.TinyInt
-  cliente         cliente  @relation(fields: [id_cliente], references: [id_cliente], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_cliente_cobro")
-  usuario         usuario  @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_usuario_cobro")
+  estado          Int        @default(1) @db.TinyInt
+  cliente         cliente    @relation(fields: [id_cliente], references: [id_cliente], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_cliente_cobro")
+  item_cobro      item_cobro @relation(fields: [id_item_cobro], references: [id_item_cobro], onUpdate: Restrict, map: "fk_id_item_cobro")
+  usuario         usuario    @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_usuario_cobro")
 
   @@index([id_cliente], map: "id_cliente")
   @@index([id_usuario], map: "id_usuario")
+  @@index([id_item_cobro], map: "fk_id_item_cobro")
 }
 
 model compra {
   id_compra       Int            @id @default(autoincrement())
   fecha           DateTime       @db.Date
+  id_item_compra  Int
   id_usuario      Int
   estado          Int            @default(1) @db.TinyInt
   id_proveedor    Int
@@ -93,6 +98,7 @@ model compra {
   id_deposito     Int
   tipo_operacion  Int
   deposito        deposito       @relation(fields: [id_deposito], references: [id_deposito], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_deposito_compra")
+  item_compra     item_compra    @relation(fields: [id_item_compra], references: [id_item_compra], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_item_compra")
   proveedor       proveedor      @relation(fields: [id_proveedor], references: [id_proveedor], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_proveedor_compra")
   usuario         usuario        @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_usuario_compra")
   cuenta_pagar    cuenta_pagar[]
@@ -100,6 +106,7 @@ model compra {
   @@index([id_deposito], map: "id_deposito")
   @@index([id_proveedor], map: "id_proveedor")
   @@index([id_usuario], map: "id_usuario")
+  @@index([id_item_compra], map: "fk_id_item_compra")
 }
 
 model cuenta_cobrar {
@@ -158,6 +165,7 @@ model deposito {
   stock                                           stock[]
   traslado_traslado_id_deposito_destinoTodeposito traslado[]  @relation("traslado_id_deposito_destinoTodeposito")
   traslado_traslado_id_deposito_origenTodeposito  traslado[]  @relation("traslado_id_deposito_origenTodeposito")
+  venta                                           venta[]
 
   @@index([id_encargado], map: "id_encargado")
 }
@@ -189,8 +197,10 @@ model funcionario {
 model item_cobro {
   id_item_cobro    Int           @id @default(autoincrement())
   id_cuenta_cobrar Int
+  es_cobrado       Int
   monto_nominal    Int
   monto_real       Int
+  cobro            cobro[]
   cuenta_cobrar    cuenta_cobrar @relation(fields: [id_cuenta_cobrar], references: [id_cuenta_cobrar], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_cuenta_cobrar_cobro")
 
   @@index([id_cuenta_cobrar], map: "id_cuenta_cobrar")
@@ -202,6 +212,7 @@ model item_compra {
   cantidad        Int
   precio_unitario Int
   monto_iva       Decimal  @db.Decimal(10, 0)
+  compra          compra[]
   producto        producto @relation(fields: [id_producto], references: [id_producto], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_producto_item_compra")
 
   @@index([id_producto], map: "id_produtco")
@@ -210,31 +221,35 @@ model item_compra {
 model item_pago {
   id_item_pago    Int          @id @default(autoincrement())
   id_cuenta_pagar Int
+  es_pagado       Int
   monto_nominal   Int
   monto_real      Int
   cuenta_pagar    cuenta_pagar @relation(fields: [id_cuenta_pagar], references: [id_cuenta_pagar], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_cuenta_pagar_pago")
+  pago            pago[]
 
   @@index([id_cuenta_pagar], map: "id_cuenta_pagar")
 }
 
 model item_traslado {
-  id_traslado Int      @id @default(autoincrement())
+  id_traslado Int        @id @default(autoincrement())
   id_producto Int
   cantidad    Int
-  producto    producto @relation(fields: [id_producto], references: [id_producto], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_producto_traslado")
+  producto    producto   @relation(fields: [id_producto], references: [id_producto], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_producto_traslado")
+  traslado    traslado[]
 
   @@index([id_producto], map: "id_producto")
 }
 
 model item_venta {
-  id_item_venta   Int      @id @default(autoincrement())
-  id_producto     Int
-  cantidad        Int
-  precio_unitario Int
-  monto_iva       Decimal  @db.Decimal(11, 0)
-  id_venta        Int
-  producto        producto @relation(fields: [id_producto], references: [id_producto], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_producto_venta")
-  venta           venta    @relation(fields: [id_venta], references: [id_venta], onUpdate: Restrict, map: "fk_id_venta")
+  id_item_venta                         Int      @id @default(autoincrement())
+  id_producto                           Int
+  cantidad                              Int
+  precio_unitario                       Int
+  monto_iva                             Decimal  @db.Decimal(11, 0)
+  id_venta                              Int
+  producto                              producto @relation(fields: [id_producto], references: [id_producto], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_producto_venta")
+  venta                                 venta    @relation(fields: [id_venta], references: [id_venta], onUpdate: Restrict, map: "fk_id_venta")
+  venta_venta_id_item_ventaToitem_venta venta[]  @relation("venta_id_item_ventaToitem_venta")
 
   @@index([id_producto], map: "id_producto")
   @@index([id_venta], map: "id_venta")
@@ -260,6 +275,7 @@ model licencia {
 model pago {
   id_pago         Int       @id @default(autoincrement())
   id_proveedor    Int
+  id_item_pago    Int
   subtotal        Int
   descuento       Int
   total           Int
@@ -267,11 +283,13 @@ model pago {
   fecha_anulacion DateTime  @db.Date
   id_usuario      Int
   estado          Int       @default(1) @db.TinyInt
+  item_pago       item_pago @relation(fields: [id_item_pago], references: [id_item_pago], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_item_pago")
   proveedor       proveedor @relation(fields: [id_proveedor], references: [id_proveedor], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_proveedor_pago")
   usuario         usuario   @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_usuario_pago")
 
   @@index([id_proveedor], map: "id_proveedor")
   @@index([id_usuario], map: "id_usuario")
+  @@index([id_item_pago], map: "fk_id_item_pago")
 }
 
 model pago_salario {
@@ -339,7 +357,7 @@ model producto {
 model proveedor {
   id_proveedor   Int            @id @default(autoincrement())
   descripcion    String         @db.VarChar(200)
-  ruc            Int
+  ruc            String         @db.VarChar(11)
   id_responsable Int
   telefono       String         @db.VarChar(200)
   direccion      String         @db.VarChar(200)
@@ -377,22 +395,25 @@ model tipo_licencia {
 }
 
 model traslado {
-  id_traslado                                     Int         @id @default(autoincrement())
-  fecha                                           DateTime    @db.Date
-  fecha_cierre                                    DateTime    @db.Date
-  estado                                          Int         @default(1) @db.TinyInt
+  id_traslado                                     Int           @id @default(autoincrement())
+  fecha                                           DateTime      @db.Date
+  fecha_cierre                                    DateTime      @db.Date
+  id_item_traslado                                Int
+  estado                                          Int           @default(1) @db.TinyInt
   id_responsable                                  Int
   id_deposito_origen                              Int
   id_deposito_destino                             Int
   id_transporte                                   Int
-  deposito_traslado_id_deposito_destinoTodeposito deposito    @relation("traslado_id_deposito_destinoTodeposito", fields: [id_deposito_destino], references: [id_deposito], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_deposito_destino_traslado")
-  deposito_traslado_id_deposito_origenTodeposito  deposito    @relation("traslado_id_deposito_origenTodeposito", fields: [id_deposito_origen], references: [id_deposito], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_deposito_origen_traslado")
-  funcionario                                     funcionario @relation(fields: [id_responsable], references: [id_funcionario], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_responsable_traslado")
+  deposito_traslado_id_deposito_destinoTodeposito deposito      @relation("traslado_id_deposito_destinoTodeposito", fields: [id_deposito_destino], references: [id_deposito], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_deposito_destino_traslado")
+  deposito_traslado_id_deposito_origenTodeposito  deposito      @relation("traslado_id_deposito_origenTodeposito", fields: [id_deposito_origen], references: [id_deposito], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_deposito_origen_traslado")
+  item_traslado                                   item_traslado @relation(fields: [id_item_traslado], references: [id_traslado], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_item_traslado")
+  funcionario                                     funcionario   @relation(fields: [id_responsable], references: [id_funcionario], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_responsable_traslado")
 
   @@index([id_deposito_destino], map: "id_deposito_destino")
   @@index([id_deposito_origen], map: "id_deposito_origen")
   @@index([id_responsable], map: "id_responsable")
   @@index([id_transporte], map: "id_transporte")
+  @@index([id_item_traslado], map: "fk_id_item_traslado")
 }
 
 model unidad_de_medida {
@@ -415,28 +436,35 @@ model usuario {
   pago       pago[]
   perfil     perfil      @relation(fields: [id_perfil], references: [id_perfil], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_perfil_usuario")
   persona    persona     @relation(fields: [id_persona], references: [id_persona], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_persona_usuario")
+  venta      venta[]
 
   @@index([id_perfil], map: "id_perfil")
   @@index([id_persona], map: "id_persona")
 }
 
 model venta {
-  id_venta        Int             @id @default(autoincrement())
-  fecha           Int
-  id_usuario      Int
-  estado          Int             @default(1) @db.TinyInt
-  id_cliente      Int
-  total_iva       Float           @db.Float
-  subtotal        Int
-  descuento       Int
-  total           Int
-  fecha_anulacion DateTime        @db.Date
-  id_deposito     Int
-  tipo_operacion  Int
-  cuenta_cobrar   cuenta_cobrar[]
-  item_venta      item_venta[]
+  id_venta                                   Int             @id @default(autoincrement())
+  fecha                                      DateTime        @db.Date
+  id_usuario                                 Int
+  id_item_venta                              Int
+  estado                                     Int             @default(1) @db.TinyInt
+  id_cliente                                 Int
+  total_iva                                  Float           @db.Float
+  subtotal                                   Int
+  descuento                                  Int
+  total                                      Int
+  fecha_anulacion                            DateTime        @db.Date
+  id_deposito                                Int
+  tipo_operacion                             Int
+  cuenta_cobrar                              cuenta_cobrar[]
+  item_venta                                 item_venta[]
+  cliente                                    cliente         @relation(fields: [id_cliente], references: [id_cliente], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_cliente")
+  deposito                                   deposito        @relation(fields: [id_deposito], references: [id_deposito], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_deposito ")
+  item_venta_venta_id_item_ventaToitem_venta item_venta      @relation("venta_id_item_ventaToitem_venta", fields: [id_item_venta], references: [id_item_venta], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_item_venta")
+  usuario                                    usuario         @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_usuario")
 
   @@index([id_cliente], map: "id_cliente")
   @@index([id_deposito], map: "id_deposito")
   @@index([id_usuario], map: "id_usuario")
+  @@index([id_item_venta], map: "id_item_venta")
 }
