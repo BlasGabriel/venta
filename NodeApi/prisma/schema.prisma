@@ -176,7 +176,7 @@ model funcionario {
   id_dependencia Int
   id_cargo       Int
   salario        Int
-  horario        Int
+  horario        DateTime       @db.Time(0)
   estado         Int            @default(1) @db.TinyInt
   deposito       deposito[]
   cargo          cargo          @relation(fields: [id_cargo], references: [id_cargo], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_cargo_funcionario")
@@ -242,15 +242,14 @@ model item_traslado {
 }
 
 model item_venta {
-  id_item_venta                         Int      @id @default(autoincrement())
-  id_producto                           Int
-  cantidad                              Int
-  precio_unitario                       Int
-  monto_iva                             Decimal  @db.Decimal(11, 0)
-  id_venta                              Int
-  producto                              producto @relation(fields: [id_producto], references: [id_producto], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_producto_venta")
-  venta                                 venta    @relation(fields: [id_venta], references: [id_venta], onUpdate: Restrict, map: "fk_id_venta")
-  venta_venta_id_item_ventaToitem_venta venta[]  @relation("venta_id_item_ventaToitem_venta")
+  id_item_venta   Int      @id @default(autoincrement())
+  id_producto     Int
+  cantidad        Int
+  precio_unitario Int
+  monto_iva       Decimal  @db.Decimal(11, 0)
+  id_venta        Int
+  producto        producto @relation(fields: [id_producto], references: [id_producto], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_producto_venta")
+  venta           venta    @relation(fields: [id_venta], references: [id_venta], onUpdate: Restrict, map: "fk_id_venta")
 
   @@index([id_producto], map: "id_producto")
   @@index([id_venta], map: "id_venta")
@@ -444,28 +443,25 @@ model usuario {
 }
 
 model venta {
-  id_venta                                   Int             @id @default(autoincrement())
-  fecha                                      DateTime        @db.Date
-  id_usuario                                 Int
-  id_item_venta                              Int
-  estado                                     Int             @default(1) @db.TinyInt
-  id_cliente                                 Int
-  total_iva                                  Float           @db.Float
-  subtotal                                   Int
-  descuento                                  Int
-  total                                      Int
-  fecha_anulacion                            DateTime        @db.Date
-  id_deposito                                Int
-  tipo_operacion                             Int
-  cuenta_cobrar                              cuenta_cobrar[]
-  item_venta                                 item_venta[]
-  cliente                                    cliente         @relation(fields: [id_cliente], references: [id_cliente], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_cliente")
-  deposito                                   deposito        @relation(fields: [id_deposito], references: [id_deposito], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_deposito ")
-  item_venta_venta_id_item_ventaToitem_venta item_venta      @relation("venta_id_item_ventaToitem_venta", fields: [id_item_venta], references: [id_item_venta], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_item_venta")
-  usuario                                    usuario         @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_usuario")
+  id_venta        Int             @id @default(autoincrement())
+  fecha           DateTime        @db.Date
+  id_usuario      Int
+  estado          Int             @default(1) @db.TinyInt
+  id_cliente      Int
+  total_iva       Float           @db.Float
+  subtotal        Int
+  descuento       Int
+  total           Int
+  fecha_anulacion DateTime        @db.Date
+  id_deposito     Int
+  tipo_operacion  Int
+  cuenta_cobrar   cuenta_cobrar[]
+  item_venta      item_venta[]
+  cliente         cliente         @relation(fields: [id_cliente], references: [id_cliente], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_cliente")
+  deposito        deposito        @relation(fields: [id_deposito], references: [id_deposito], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_deposito ")
+  usuario         usuario         @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_usuario")
 
   @@index([id_cliente], map: "id_cliente")
   @@index([id_deposito], map: "id_deposito")
   @@index([id_usuario], map: "id_usuario")
-  @@index([id_item_venta], map: "id_item_venta")
 }
