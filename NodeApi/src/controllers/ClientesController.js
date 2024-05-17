@@ -46,7 +46,8 @@ export const buscarId = async(req, res, next) => {
 }
 export const buscarRuc = async(req, res, next) => {
     try{
-        const ruc = parseInt(req.params.ruc);
+        const ruc = req.params.ruc;
+        console.log(ruc)
         const cliente = await prisma.cliente.findFirst({
             where: {
                 // id_cliente: id,

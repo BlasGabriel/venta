@@ -37,6 +37,7 @@ export const ClientesProvider = ({ children }) => {
         }
     }
     const getClienteRuc = async (ruc) => {
+        // console.log(ruc)
         try {
             const response = await getClienteRucApi(ruc);
             setLoading(false);

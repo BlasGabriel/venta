@@ -78,9 +78,9 @@ model cobro {
   item_cobro      item_cobro @relation(fields: [id_item_cobro], references: [id_item_cobro], onUpdate: Restrict, map: "fk_id_item_cobro")
   usuario         usuario    @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_usuario_cobro")
 
+  @@index([id_item_cobro], map: "fk_id_item_cobro")
   @@index([id_cliente], map: "id_cliente")
   @@index([id_usuario], map: "id_usuario")
-  @@index([id_item_cobro], map: "fk_id_item_cobro")
 }
 
 model compra {
@@ -214,8 +214,8 @@ model item_compra {
   compra          compra   @relation(fields: [id_compra], references: [id_compra], onUpdate: Restrict, map: "fk_id_compra_item_compra")
   producto        producto @relation(fields: [id_producto], references: [id_producto], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_producto_item_compra")
 
-  @@index([id_producto], map: "id_produtco")
   @@index([id_compra], map: "id_compra")
+  @@index([id_producto], map: "id_produtco")
   @@index([id_compra], map: "item_compra")
 }
 
@@ -287,9 +287,9 @@ model pago {
   proveedor       proveedor @relation(fields: [id_proveedor], references: [id_proveedor], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_proveedor_pago")
   usuario         usuario   @relation(fields: [id_usuario], references: [id_usuario], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_usuario_pago")
 
+  @@index([id_item_pago], map: "fk_id_item_pago")
   @@index([id_proveedor], map: "id_proveedor")
   @@index([id_usuario], map: "id_usuario")
-  @@index([id_item_pago], map: "fk_id_item_pago")
 }
 
 model pago_salario {
@@ -409,11 +409,11 @@ model traslado {
   item_traslado                                   item_traslado @relation(fields: [id_item_traslado], references: [id_traslado], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_item_traslado")
   funcionario                                     funcionario   @relation(fields: [id_responsable], references: [id_funcionario], onDelete: NoAction, onUpdate: NoAction, map: "fk_id_responsable_traslado")
 
+  @@index([id_item_traslado], map: "fk_id_item_traslado")
   @@index([id_deposito_destino], map: "id_deposito_destino")
   @@index([id_deposito_origen], map: "id_deposito_origen")
   @@index([id_responsable], map: "id_responsable")
   @@index([id_transporte], map: "id_transporte")
-  @@index([id_item_traslado], map: "fk_id_item_traslado")
 }
 
 model unidad_de_medida {

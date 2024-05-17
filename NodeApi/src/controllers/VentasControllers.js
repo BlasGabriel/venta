@@ -53,13 +53,16 @@ export const insertar = async (req, res, next) => {
 
     const venta = await prisma.venta.create({
       data: {
-        id_cliente,
-        fecha: fecha,
+        // id_cliente,
+        cliente:{connect : {id_cliente:id_cliente}},
+        fecha: new Date(fecha),
         fecha_anulacion: new Date(fecha_anulacion),
         total,
         estado,
-        id_usuario,
-        id_deposito,
+        // id_usuario,
+        usuario: {connect:{id_usuario:id_usuario}},
+        deposito:{connect : {id_deposito:id_deposito}},
+        // id_deposito,
         tipo_operacion: parseInt(tipo_operacion),
         descuento,
         subtotal,
@@ -82,8 +85,9 @@ export const insertar = async (req, res, next) => {
       // console.log(product)
       const item_venta = await prisma.item_venta.create({
         data: {
-          id_venta: venta.id_venta,
-          id_producto: product.id_producto,
+          // id_venta: venta.id_venta,
+          venta: { connect:{id_venta: venta.id_venta}},
+          producto:{connect:{id_producto: product.id_producto}},
           cantidad: product.quantity,
           precio_unitario: product.precio_venta_maximo,
           monto_iva: product.porcentaje_iva,
@@ -116,9 +120,9 @@ export const insertar = async (req, res, next) => {
       console.log("Credito");
       const cuenta_cobrar = await prisma.cuenta_cobrar.create({
         data: {
-          id_venta: venta.id_venta,
+          venta:{connect:{id_venta: venta.id_venta}},
           // id_deposito: id_deposito
-          id_cliente: id_cliente,
+          cliente:{connect:{id_cliente: id_cliente}},
           fecha: new Date(),
           fecha_pago: new Date(),
           monto: total,
@@ -137,6 +141,7 @@ export const insertar = async (req, res, next) => {
             id_cuenta_cobrar: cuenta_cobrar.id_cuenta_cobrar,
             monto_nominal: total / cantidadPagos,
             monto_real: total / cantidadPagos * interes / 100,
+            es_cobrado: 0
           },
         });
 
