@@ -29,7 +29,7 @@ export const buscarCuenta = async(req, res, next) => {
     try{
         const id_cuenta = parseInt(req.params.id_cuenta);
 
-        const itemCobro = await prisma.item_cobro.findFirst({
+        const itemCobro = await prisma.item_cobro.findMany({
             where: {
                 id_cuenta_cobrar: id_cuenta
             }
