@@ -1,12 +1,14 @@
 "use client";
-import { Container, TextField, Typography } from "@mui/material";
+import { Container, Stack, TextField, Typography } from "@mui/material";
 import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import ButtonDE from "./ButtonDE";
 import { useUser } from "../context/UserContext";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
   const [valuee, setValue] = useState();
+  const router = useRouter();
 
   const { user, getUser } = useUser();
   const handleChange = (event) => {
@@ -15,22 +17,32 @@ const Login = () => {
       [event.target.name]: event.target.value,
     });
   };
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    getUser(valuee);
+    try {
+      // console.log(valuee);
+      await getUser(valuee);
+      // redirect to home page
+    } catch (error) {
+      console.log(error);
+    }
     console.log(valuee);
     console.log(user);
-
   };
 
   useEffect(() => {
     console.log(user);
+    if (user.id_usuario != "" && user != "") {
+      router.push("/home");
+    }
   }, [user]);
   return (
     <div style={{ width: "100%" }}>
       <form onSubmit={handleSubmit}>
         <Container className="custom-container">
-          <Typography
+          <Stack spacing={1} >
+
+          <Typography align="center"
             variant="h4"
             //  className="text-3xl font-bold underline"
           >
@@ -56,10 +68,12 @@ const Login = () => {
               // className="block w-full "
             />
           </div>
-          <Link href="/home">
-            <ButtonDE>Iniciar sesión</ButtonDE>
-          </Link>
-          <ButtonDE type="submit">Mostrar consola</ButtonDE>
+          {/* <Link href="/home"> */}
+          <ButtonDE type="submit">Iniciar sesión</ButtonDE>
+          {/* </Link> */}
+          {/* <ButtonDE type="submit">Mostrar consola</ButtonDE> */}
+          </Stack>
+
         </Container>
       </form>
     </div>

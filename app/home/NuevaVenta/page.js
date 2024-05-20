@@ -21,6 +21,7 @@ import { useClientes } from "@/app/context/ClientesContext";
 import BoxTable from "@/app/components/containers/BoxTable";
 import SearchIcon from "@mui/icons-material/Search";
 import Carrito from "./Carrito";
+import ProveedoresAutocomplete from "./ProveedoresAutocomplete";
 
 function Page() {
   const { products, getProducts } = useProductos();
@@ -133,6 +134,10 @@ function Page() {
   if (!paginatedItem) {
     return <div>Cargando productos...</div>;
   }
+  const handleProveedorChange = (id_deposito) => {
+    setCliente(id_deposito);
+    console.log("Selected Depósito ID:", id_deposito);
+  };
 
   return (
     <div>
@@ -221,6 +226,7 @@ function Page() {
           sx={{ m: 2 }}
           spacing={1}
         >
+            {/*
           <Stack direction={"row"} spacing={2}>
             <TextField
               id="outlined-multiline-flexible"
@@ -233,8 +239,12 @@ function Page() {
             />
             <ButtonDE onClick={() => buscarCliente(clienteRUC)}>
               Buscar
-            </ButtonDE>
+             </ButtonDE>
           </Stack>
+             */}
+             <ProveedoresAutocomplete 
+                         onProveedoresChange={handleProveedorChange}
+                         />
           <Typography variant="h5">Cliente: {cliente.descripcion}</Typography>
 
           <BoxTable>
