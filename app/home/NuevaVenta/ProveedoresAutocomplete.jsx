@@ -25,7 +25,6 @@ const ProveedoresAutocomplete = ({ onProveedoresChange }) => {
         setSelectedProveedores(newValue);
         if (onProveedoresChange) {
             onProveedoresChange(newValue ? newValue : null);
-            // onProveedoresChange(newValue ? newValue.id_proveedor : null);
         }
     };
 
