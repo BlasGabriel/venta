@@ -15,6 +15,9 @@ export default function RootLayout({ children }) {
           <ItemButtonNav linkTo="/home/DeudasPagadas">Deudas pagadas</ItemButtonNav>
 
           <ItemButtonNav linkTo="/home/NuevaVenta">Nueva Venta </ItemButtonNav>
+
+          <ItemButtonNav linkTo="/home/DeudasCobrar">Deudas A Cobrar</ItemButtonNav>
+
           <ItemButtonNav >Salir </ItemButtonNav>
         </Stack>
         <main>{children}</main>

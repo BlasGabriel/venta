@@ -1,6 +1,6 @@
 "use client";
 import { createContext, useState, useContext, useEffect } from "react";
-import { getUsuario } from "../api/usuario.api";
+import { getUsuario } from "../api/Usuario.api";
 import Cookies from "js-cookie";
 export const UserContext = createContext();
 
