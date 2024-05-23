@@ -103,6 +103,24 @@ export const editar = async(req, res, next) => {
     }
 }
 
+export const cobrar = async(req, res, next) => {
+    try{
+        const id = parseInt(req.params.id);
+        const itemCobro = await prisma.item_cobro.update({
+            where: {
+                id_item_cobro: id
+            },
+            data: {
+                es_cobrado: 1
+            }
+        });
+        res.json('Registro de item de cobro cobrado...');
+    }
+    catch(error){
+        next(error);
+    }
+}
+
 export const eliminar = async(req, res, next) => {
     try{
         const id = parseInt(req.params.id);

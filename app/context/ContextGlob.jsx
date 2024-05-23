@@ -5,6 +5,7 @@ import { UserProvider } from "./UserContext";
 import { ProductosProvider } from "./ProductosContext";
 import { ClientesProvider } from "./ClientesContext";
 import { VentasProvider } from "./VentasContext";
+import { DeudasCobrarProvider } from "./DeudasCobrarContext";
 
 export const ContextGlob = createContext();
 
@@ -24,7 +25,9 @@ export const ContextGlobProvider = ({ children }) => {
       <ClientesProvider>
         <ProductosProvider>
           <VentasProvider>
-          {children}
+            <DeudasCobrarProvider>
+                {children}
+            </DeudasCobrarProvider>
           </VentasProvider>
         </ProductosProvider>
       </ClientesProvider>
